@@ -38,7 +38,7 @@ client.on("message", (message) => {
       console.log(`Yay, the author of the message has the role!`);
       let palaceChannel = client.channels.find("name","palace");
       message.member.addRole(role).catch(console.error);
-      palaceChannel.send(welcomeLines[Math.floor(Math.random() * (welcomeLines.length - 0 + 1)) + 0].replace("{}",message.member))
+      palaceChannel.send(welcomeLines[Math.floor(Math.random() * (welcomeLines.length))].replace("{}",message.member))
       if(!palaceState["playerList"]) {
           palaceState["playerList"] = [];
       }
