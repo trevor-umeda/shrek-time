@@ -7,6 +7,7 @@ client.login(config.token);
 
 client.on("ready", () => {
   console.log("I am ready!");
+  client.user.setGame("In the Metaverse")
 });
 
 const trueAdminIds = [
@@ -21,7 +22,20 @@ const welcomeLines = [
   "Looks like {} is here everybody!"
 ]
 
+const battleStartLines = [
+  "A shadow has appeared!",
+  "Incoming shadow. Be careful",
+  "Enemy engaged"
+]
+
+const allOutGif = "http://i.giphy.com/3xz2BCSe49b6zJQSdO.gif"
+
 let palaceState = JSON.parse(fs.readFileSync("./palaceState.json", "utf8"));
+
+var postAllOutGif = function() {
+  let palaceChannel = client.channels.find("name","palace");
+  palaceChannel.send(allOutGif)
+}
 
 client.on("message", (message) => {
 
@@ -58,7 +72,28 @@ client.on("message", (message) => {
   if(message.content.startsWith("!palace")) {
     if(trueAdminIds.indexOf(message.member.id) >= 0) {
       console.log("This is a super admin, goodjob");
-
+      const args = message.content.split(/\s+/g).slice(1);
+      if(args[0] && args[0] == "startFight") {
+        let palaceChannel = client.channels.find("name","palace");
+        // palaceChannel.send(battleStartLines[Math.floor(Math.random() * (welcomeLines.length))].replace("{}",message.member))
+        console.log(battleStartLines[Math.floor(Math.random() * (battleStartLines.length))]);
+        if(!palaceState["currentPlayerIndex"]) {
+          palaceState["currentPlayerIndex"] = 0;
+        }
+        let currentPlayer = palaceState["currentPlayerIndex"];
+        let currentPlayerId = palaceState["playerList"][currentPlayer];
+        console.log("player " + currentPlayerId + " is up to bat");
+        let currentPlayerUser = client.users.get(currentPlayerId)
+        console.log(currentPlayerUser + " you are up");
+        currentPlayer++;
+        if(currentPlayer == palaceState["playerList"].length) {
+          currentPlayer = 0;
+        }
+        palaceState["currentPlayerIndex"] = currentPlayer;
+        fs.writeFile("./palaceState.json", JSON.stringify(palaceState), (err) => {
+          if (err) console.error(err)
+        });
+      }
     }
   }
 
