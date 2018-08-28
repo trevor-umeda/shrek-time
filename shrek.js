@@ -7,7 +7,7 @@ client.login(config.token);
 
 client.on("ready", () => {
   console.log("I am ready!");
-  client.user.setGame("In the Metaverse")
+  client.user.setGame("All Star")
 });
 
 const trueAdminIds = [
@@ -28,47 +28,13 @@ const battleStartLines = [
   "Enemy engaged"
 ]
 
-const allOutGif = "http://i.giphy.com/3xz2BCSe49b6zJQSdO.gif"
-
-let palaceState = JSON.parse(fs.readFileSync("./palaceState.json", "utf8"));
-
-var postAllOutGif = function() {
-  let palaceChannel = client.channels.find("name","palace");
-  palaceChannel.send(allOutGif)
-}
-
 client.on("message", (message) => {
-
+  console.log("Test message for guild name " + message.guild.name);
   if (message.author.bot) return;
 
   if (message.content.startsWith("ping")) {
     message.channel.send("pong!");
   }
-
-  if(message.content.match(/^(?=.*?ben)(?=.*?love live)(?=.*?church).*$/)) {
-    let role = message.guild.roles.find("name", "Idol Thief");
-
-    if(!message.member.roles.has(role.id)) {
-      console.log(`Yay, the author of the message has the role!`);
-      let palaceChannel = client.channels.find("name","palace");
-      message.member.addRole(role).catch(console.error);
-      palaceChannel.send(welcomeLines[Math.floor(Math.random() * (welcomeLines.length))].replace("{}",message.member))
-      if(!palaceState["playerList"]) {
-          palaceState["playerList"] = [];
-      }
-      if(!palaceState["players"]) {
-        palaceState["players"] = {};
-      }
-      if(palaceState["playerList"].indexOf(message.member.id) < 0) {
-        palaceState["playerList"].push(message.member.id);
-        palaceState["players"][message.member.id] = {}
-        fs.writeFile("./palaceState.json", JSON.stringify(palaceState), (err) => {
-          if (err) console.error(err)
-        });
-      }
-    }
-  }
-
   if(message.content.startsWith("!palace")) {
     if(trueAdminIds.indexOf(message.member.id) >= 0) {
       console.log("This is a super admin, goodjob");
