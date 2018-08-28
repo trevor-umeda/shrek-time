@@ -15,55 +15,42 @@ const trueAdminIds = [
   "227946560095256576" //Intelligent Malfestio
 ]
 
-const welcomeLines = [
-  "You finally made it {}!",
-  "Glad you could show up {}.",
-  "{} on the scene!",
-  "Looks like {} is here everybody!"
-]
-
-const battleStartLines = [
-  "A shadow has appeared!",
-  "Incoming shadow. Be careful",
-  "Enemy engaged"
-]
+const shrekTimeInHours = 1.583
+const shrekTimeInMinutes = 95
 
 client.on("message", (message) => {
-  console.log("Test message for guild name " + message.guild.name);
+  // console.log("Test message for guild name " + message.guild.name);
   if (message.author.bot) return;
-
-  if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
-  }
-  if(message.content.startsWith("!palace")) {
-    if(trueAdminIds.indexOf(message.member.id) >= 0) {
-      console.log("This is a super admin, goodjob");
-      const args = message.content.split(/\s+/g).slice(1);
-      if(args[0] && args[0] == "startFight") {
-        let palaceChannel = client.channels.find("name","palace");
-        // palaceChannel.send(battleStartLines[Math.floor(Math.random() * (welcomeLines.length))].replace("{}",message.member))
-        console.log(battleStartLines[Math.floor(Math.random() * (battleStartLines.length))]);
-        if(!palaceState["currentPlayerIndex"]) {
-          palaceState["currentPlayerIndex"] = 0;
-        }
-        let currentPlayer = palaceState["currentPlayerIndex"];
-        let currentPlayerId = palaceState["playerList"][currentPlayer];
-        console.log("player " + currentPlayerId + " is up to bat");
-        let currentPlayerUser = client.users.get(currentPlayerId)
-        console.log(currentPlayerUser + " you are up");
-        currentPlayer++;
-        if(currentPlayer == palaceState["playerList"].length) {
-          currentPlayer = 0;
-        }
-        palaceState["currentPlayerIndex"] = currentPlayer;
-        fs.writeFile("./palaceState.json", JSON.stringify(palaceState), (err) => {
-          if (err) console.error(err)
-        });
-      }
+  
+  if(message.content.startsWith("!convert")) {
+    const args = message.content.split(/\s+/g).slice(1);
+    if(message.content.indexOf("hour") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 ) * 60
+      message.channel.send(time + " shreks!");
+    }
+    else if(message.content.indexOf("minute") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 )
+      message.channel.send(time + " shreks!");
+    }
+    else if(message.content.indexOf("second") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 ) / 60
+      message.channel.send(time + " shreks!");
+    }
+    else if(message.content.indexOf("day") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 ) * 60 * 24
+      message.channel.send(time + " shreks!");
+    }
+    else if(message.content.indexOf("week") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 ) * 60 * 24 * 7
+      message.channel.send(time + " shreks!");
+    }
+    else if(message.content.indexOf("year") >= 0) {
+      var time =  (parseFloat(args[0]) / 95 ) * 60 * 24 * 365
+      message.channel.send(time + " shreks!");
     }
   }
 
-  if (message.content.startsWith("!logInfo")) {
+  if (message.content.startsWith("!help")) {
     let role = message.guild.roles.find("name", "Stagehand");
 
     if(role && message.member.roles.has(role.id)) {
