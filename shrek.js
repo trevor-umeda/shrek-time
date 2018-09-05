@@ -21,7 +21,7 @@ const shrekTimeInMinutes = 95
 client.on("message", (message) => {
   // console.log("Test message for guild name " + message.guild.name);
   if (message.author.bot) return;
-  
+
   if(message.content.startsWith("!convert")) {
     const args = message.content.split(/\s+/g).slice(1);
     if(message.content.indexOf("hour") >= 0) {
@@ -50,12 +50,9 @@ client.on("message", (message) => {
     }
   }
 
-  if (message.content.startsWith("!help")) {
-    let role = message.guild.roles.find("name", "Stagehand");
-
-    if(role && message.member.roles.has(role.id)) {
-      console.log(palaceState)
-
-    }
+  if (message.content.startsWith("!mimic")) {
+      let mainChannel = client.channels.find("name","test");
+      console.log(message.content.substr(message.content.indexOf(" ") + 1))
+      mainChannel.send(message.content.substr(message.content.indexOf(" ") + 1))
   }
 });
